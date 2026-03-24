@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Electra Solar — Comisiones</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d0f14;color:#e8eaf0;min-height:100vh;}
+
+/* HEADER */
+.hdr{background:#13161e;border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:99;}
+.hdr-logo{width:34px;height:34px;background:linear-gradient(135deg,#4f8ef7,#9b7af7);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;}
+.hdr-title{font-size:14px;font-weight:600;}
+.hdr-sub{font-size:11px;color:#8b90a0;margin-top:2px;}
+
+/* MAIN */
+.main{padding:14px 14px 40px;}
+
+/* TABS */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.tab{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;border:1px solid rgba(255,255,255,0.1);background:#13161e;color:#8b90a0;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
+.tab.on{background:rgba(79,142,247,0.12);border-color:#4f8ef7;color:#4f8ef7;}
+.tab .n{font-size:11px;padding:1px 6px;border-radius:999px;background:rgba(255,255,255,0.07);color:#5a6070;}
+.tab.on .n{background:rgba(79,142,247,0.2);color:#4f8ef7;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat{background:#13161e;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 14px;}
+.stat-lbl{font-size:10px;font-weight:600;color:#5a6070;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.stat-val{font-size:20px;font-weight:700;font-family:'Courier New',monospace;}
+.g{color:#2ec4a0;} .a{color:#f5a623;} .r{color:#e05c5c;}
+
+/* TOOLBAR */
+.toolbar{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.srch{width:100%;background:#13161e;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px 10px 36px;font-size:14px;color:#e8eaf0;font-family:inherit;outline:none;}
+.srch-wrap{position:relative;}
+.srch-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5a6070;font-size:14px;pointer-events:none;}
+.flt{width:100%;background:#13161e;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;font-size:14px;color:#8b90a0;font-family:inherit;outline:none;}
+
+/* CLIENT CARDS */
+.cards{display:flex;flex-direction:column;gap:0;background:#13161e;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.sec-hdr{padding:7px 14px;font-size:10px;font-weight:600;color:#5a6070;text-transform:uppercase;letter-spacing:.09em;background:#1a1e28;border-bottom:1px solid rgba(255,255,255,0.05);}
+.sec-hdr:not(:first-child){border-top:1px solid rgba(255,255,255,0.05);}
+.ccard{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.ccard:last-child{border-bottom:none;}
+.c-num{font-size:11px;color:#5a6070;font-family:'Courier New',monospace;min-width:18px;}
+.c-name{font-size:14px;font-weight:500;flex:1;min-width:120px;}
+.c-kw{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;font-family:'Courier New',monospace;flex-shrink:0;}
+.kw-hi{background:rgba(224,92,92,0.12);color:#e05c5c;border:1px solid rgba(224,92,92,0.2);}
+.kw-lo{background:rgba(46,196,160,0.12);color:#2ec4a0;border:1px solid rgba(46,196,160,0.2);}
+.c-com{font-size:14px;font-weight:700;font-family:'Courier New',monospace;margin-left:auto;}
+.c-badge-row{width:100%;padding-left:24px;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;}
+.b-paid{background:rgba(46,196,160,0.12);color:#2ec4a0;border:1px solid rgba(46,196,160,0.25);}
+.b-partial{background:rgba(245,166,35,0.12);color:#f5a623;border:1px solid rgba(245,166,35,0.25);}
+.b-none{background:rgba(255,255,255,0.05);color:#5a6070;border:1px solid rgba(255,255,255,0.08);}
+.b-claw{background:rgba(224,92,92,0.12);color:#e05c5c;border:1px solid rgba(224,92,92,0.25);}
+.shared{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:999px;background:rgba(155,122,247,0.12);color:#9b7af7;border:1px solid rgba(155,122,247,0.2);margin-left:5px;}
+.empty{text-align:center;padding:32px;color:#5a6070;font-size:13px;}
+
+/* PAYMENT SECTION */
+.pay-lbl{font-size:10px;font-weight:600;color:#5a6070;text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;}
+.pay-card{background:#13161e;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;margin-bottom:8px;}
+.pay-hdr{display:flex;align-items:center;padding:13px 14px;cursor:pointer;gap:10px;}
+.pay-hdr:active{background:rgba(255,255,255,0.03);}
+.pay-hdr-left{flex:1;min-width:0;}
+.pay-name{font-size:13px;font-weight:500;color:#e8eaf0;display:block;}
+.pay-cnt{font-size:11px;color:#5a6070;display:block;margin-top:2px;}
+.pay-hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.pay-total{font-size:15px;font-weight:700;font-family:'Courier New',monospace;color:#2ec4a0;}
+.pay-chev{font-size:14px;color:#5a6070;transition:transform .2s;display:inline-block;}
+.pay-chev.open{transform:rotate(180deg);}
+.pay-lines{border-top:1px solid rgba(255,255,255,0.05);background:#0f1219;padding:4px 14px 8px;}
+.dline{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);flex-wrap:wrap;}
+.dline:last-child{border-bottom:none;}
+.ddot{width:5px;height:5px;border-radius:50%;background:#2ec4a0;flex-shrink:0;}
+.ddate{font-size:11px;color:#5a6070;font-family:'Courier New',monospace;min-width:90px;}
+.dsrc{font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(255,255,255,0.06);color:#5a6070;white-space:nowrap;}
+.dmemo{flex:1;font-size:12px;color:#8b90a0;font-style:italic;min-width:80px;}
+.damt{font-size:13px;font-weight:600;font-family:'Courier New',monospace;color:#e8eaf0;margin-left:auto;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">E</div>
+  <div>
+    <div class="hdr-title">Electra Solar — Comisiones</div>
+    <div class="hdr-sub">Comparativa setters · Pagos y clawbacks</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="tabs" id="tabs"></div>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar">
+    <div class="srch-wrap">
+      <span class="srch-icon">⌕</span>
+      <input class="srch" id="srch" type="text" placeholder="Buscar cliente..." oninput="render()">
+    </div>
+    <select class="flt" id="flt" onchange="render()">
+      <option value="all">Todos los estados</option>
+      <option value="paid">✓ Pagado</option>
+      <option value="partial">~ Parcial</option>
+      <option value="none">— Sin pago</option>
+      <option value="clawback">✕ Clawback</option>
+    </select>
+  </div>
+  <div class="cards" id="cards"></div>
+  <div class="pay-lbl">Resumen de pagos recibidos</div>
+  <div id="pays"></div>
+</div>
+
+<script>
+const SETTERS={
+  "Carlos":[
+    {c:"Louis techelet",s:20.88},{c:"Joseph san miguel",s:11.61},{c:"Sophia seiglie",s:8.6},{c:"Cordel skyers",s:10.32},
+    {c:"Javier lopez",s:8.6,cb:true,ca:-500},{c:"Victor narvaez- Laura trujillo",s:11.61,cb:true,ca:-500},
+    {c:"Berkis fernandez",s:15.17,cb:true,ca:-14460},{c:"Victor sutton",s:8.6},{c:"Glenda butterfield",s:8.55},
+    {c:"Lydia Carter",s:10.56},{c:"dwight depass 20837",s:8.6},{c:"Gonzalo serna",s:15.4,cb:true,ca:-500},
+    {c:"Claudia velez-rosado",s:8.36},{c:"Shirley depass 20806",s:11.18,cb:true,ca:-500},
+    {c:"shirley depass",s:10.25,cb:true,ca:-500},{c:"Sandra Varela",s:11.75,cb:true,ca:-500},
+    {c:"Gian fuentes",s:11.44},{c:"Daniel coria",s:11.44},{c:"dulce monsalve",s:11.0},
+    {c:"juan cordova",s:10.56,cb:true,ca:-500},{c:"Joseph san miguel add on",s:4.4,fp:500}
+  ],
+  "Anthony":[
+    {c:"Alexis pacheco",s:6.45},{c:"Adalberto rodriguez",s:9.89},{c:"Ricardo quiroga",s:5.16},{c:"Jimmy lopez",s:16.34},
+    {c:"Jonathan tevalan",s:15.3},{c:"Teresa juanchi-alfonso",s:14.08},{c:"Leslie Villagra",s:9.89},
+    {c:"Jonathan Hernandez",s:7.31,sh:"Juan",fc:500,fp:250},
+    {c:"Joslen martinez",s:9.03},{c:"Carlos Gomez",s:5.16},{c:"Sindy santos",s:7.3},{c:"Guadalupe alegre",s:5.72},
+    {c:"Anaibis pardo",s:7.74},{c:"karina perez",s:7.74},{c:"leonardo andrade",s:8.6},{c:"Sindy santos cape coral",s:10.12},
+    {c:"Serguei perez",s:11.61,cb:true,ca:-500},{c:"Liudis Remon",s:8.17},{c:"Yarelys veitia",s:8.17},
+    {c:"Jose padron",s:8.17},{c:"adalid palma",s:6.02,sh:"Juan",fc:500,fp:250},{c:"Manny alfonso",s:11.61},
+    {c:"Gustavo thorne",s:8.17,fc:500,fp:250},
+    {c:"Joselyn lopez",s:6.88,sh:"Juan",fc:500,fp:250},
+    {c:"Victoria palacios",s:0,cb:true,ca:-250}
+  ],
+  "Ulises":[
+    {c:"Jose hernandez montenegro",s:7.31},{c:"Benjamin burgos",s:7.79},{c:"Leonardo laina",s:11.88},
+    {c:"Elias Kirkland",s:6.88,fp:1000},{c:"Carol valles",s:8.17},{c:"Armando vidal",s:7.74,cb:true,ca:-500},
+    {c:"Jairo rodriguez",s:5.16},{c:"Jose martinez",s:12.32},{c:"Kendrick torrance",s:8.17},
+    {c:"Gerardo Ruz",s:8.17,fp:1000},{c:"Alverd Christian",s:10.32,fp:1000},{c:"Juan varela",s:8.17},
+    {c:"Jose Fernandez",s:13.94},{c:"Juan disla",s:8.17},{c:"Bobby alexandre",s:6.45},{c:"Jesus Sequera",s:6.88},
+    {c:"Paula suarez",s:14.08},{c:"Evelyn pulida",s:6.45},{c:"Mildred Jones",s:4.4},{c:"Pedro tzintzun",s:5.28},
+    {c:"Yunier rodriguez",s:8.2},{c:"Genesis romero",s:7.38},{c:"David Fernandez",s:7.38,cb:true,ca:-500},
+    {c:"Ricardo Avendano",s:8.2},{c:"Guilherme Garcez",s:17.22},{c:"Rene Castillo",s:6.02},
+    {c:"Daniel rodriguez",s:7.79},{c:"Ludwing Cortez",s:13.53},
+    {c:"Jennifer colazzo",s:6.02,sh:"Juan",fc:500,fp:250}
+  ],
+  "Santiago":[
+    {c:"Arturo Gutierrez",s:7.79,np:true},{c:"Franklin cesar Pena",s:7.38,fp:500},
+    {c:"Daniel Rodriguez FLO",s:7.79,np:true},{c:"Yunier Rodriguez",s:8.2,fp:500},
+    {c:"Paul Solomon",s:7.38,fp:500},{c:"Rolando Cruz",s:6.56,cb:true,ca:-500}
+  ],
+  "Juan":[
+    {c:"Alberto vega",s:9.89},
+    {c:"Jonathan Hernandez",s:7.31,sh:"Anthony",fc:500,fp:250},
+    {c:"Adalid palma",s:6.02,sh:"Anthony",fc:500,fp:250},
+    {c:"Jennifer colazzo",s:6.02,sh:"Ulises",fc:500,fp:250},
+    {c:"Joselyn lopez",s:6.88,sh:"Anthony",fc:500,fp:250},
+    {c:"Victoria palacios",s:0,cb:true,ca:-250,sh:"Anthony"}
+  ]
+};
+
+const PAYS={
+  "Carlos Morales Solar Dynamics":[
+    {d:"Mar 13, 2026",m:".",a:700},{d:"Oct 6, 2025",m:"san miguel - techelet",a:3000},
+    {d:"Oct 20, 2025",m:"miller",a:1500},{d:"Oct 24, 2025",m:".",a:1000},
+    {d:"Nov 14, 2025",m:"mildred jones",a:1500},{d:"Jun 7, 2025",m:"bonus blitz 1",a:7000},
+    {d:"Jun 5, 2025",m:"avance",a:1000},{d:"May 21, 2025",m:"m1 san miguel",a:500},
+    {d:"May 16, 2025",m:".",a:1000},{d:"May 4, 2025",m:".",a:1000},{d:"May 4, 2025",m:".",a:500},
+    {d:"Apr 5, 2025",m:".",a:1000},{d:"Mar 26, 2025",m:"m1 renee m1 argenetta",a:1000},
+    {d:"Mar 2, 2025",m:".",a:1000},{d:"Feb 17, 2025",m:".",a:500},{d:"Feb 4, 2025",m:".",a:500},
+    {d:"Jan 24, 2025",m:"m1 enma perez",a:500},{d:"Jul 5, 2025",m:"juliet w",a:1500},
+    {d:"Jul 1, 2025",m:"halal",a:1000},{d:"Jul 18, 2025",m:"comish",a:1000},
+    {d:"Aug 5, 2025",m:"halal",a:1000},{d:"Aug 13, 2025",m:"halal",a:2500},
+    {d:"Aug 28, 2025",m:"halal",a:3500},{d:"Jul 30, 2025",m:"halal",a:1500},
+    {d:"Sep 5, 2025",m:"coria",a:500},{d:"Jun 28, 2025",m:"ss victor sutton or mary jackson",a:500}
+  ],
+  "Anthony Guerrero":[
+    {d:"Dec 26, 2025",m:"m1 thorne",a:250},{d:"Dec 12, 2025",m:"m1s",a:1000},
+    {d:"Dec 5, 2025",m:"guadulupe,adlberto,victoria palacios",a:1250},
+    {d:"Nov 28, 2025",m:"m1 compartido victoria palacios",a:250},
+    {d:"Nov 21, 2025",m:".",a:2000},{d:"Nov 21, 2025",m:".",a:500},
+    {d:"Nov 10, 2025",m:".",a:2000},{d:"Nov 8, 2025",m:".",a:2000},
+    {d:"Oct 24, 2025",m:".",a:1000},{d:"Oct 20, 2025",m:"anaibism1",a:500},
+    {d:"Oct 7, 2025",m:"di manzo",a:1000},{d:"Oct 6, 2025",m:"polpetta",a:2000},
+    {d:"Aug 2, 2025",m:"m1",a:500},{d:"May 31, 2025",m:".",a:1000},{d:"May 31, 2025",m:".",a:500},
+    {d:"May 21, 2025",m:"avance quiroga y adalberto m1",a:1000},
+    {d:"May 16, 2025",m:"fernando aguilar",a:500},{d:"May 16, 2025",m:"comision maria pineda",a:1500},
+    {d:"Mar 19, 2025",m:"adalberto rodriguez m1",a:500},{d:"Mar 13, 2025",m:"m1 fernando aguilar",a:500},
+    {d:"Feb 1, 2025",m:".",a:500}
+  ],
+  "Ulises electra":[
+    {d:"Dec 8, 2025",m:".",a:100},{d:"Dec 5, 2025",m:".",a:750},
+    {d:"Nov 28, 2025",m:"m1 jose fernandez",a:500},{d:"Nov 21, 2025",m:".",a:2000},
+    {d:"Nov 6, 2025",m:".",a:2000},{d:"Oct 24, 2025",m:".",a:500},{d:"Oct 24, 2025",m:".",a:1000},
+    {d:"Oct 20, 2025",m:"m1 elias",a:500},{d:"Sep 19, 2025",m:"5 site surveys",a:2250}
+  ],
+  "Ulises Moron New":[
+    {d:"Feb 28, 2026",m:".",a:1000},{d:"Feb 27, 2026",m:"m1ym2",a:2000},
+    {d:"Feb 24, 2026",m:"daniel rodriguez m1",a:500},{d:"Feb 3, 2026",m:"raspa",a:936},
+    {d:"Feb 1, 2026",m:"m1s",a:1000},{d:"Jan 24, 2026",m:"m1ym2",a:1000},{d:"Jan 17, 2026",m:"m2",a:3000}
+  ],
+  "Santiago Camino New":[
+    {d:"Feb 27, 2026",m:"m1 franklin arturo seat",a:600},
+    {d:"Feb 1, 2026",m:"m1 paul solomon seat week jan 31",a:700},
+    {d:"Jan 24, 2026",m:"m1 rolando cruz seat daniel rodriguez",a:600},
+    {d:"Jan 17, 2026",m:"m1 yunier rodriguez",a:500}
+  ],
+  "Juan Hernandez Electra":[
+    {d:"Dec 26, 2025",m:"m1 thorne",a:250},{d:"Dec 12, 2025",m:"m1",a:500},
+    {d:"Dec 5, 2025",m:"m1s",a:500},{d:"Nov 28, 2025",m:"m1 compartido victoria palacios",a:250},
+    {d:"Nov 19, 2025",m:".",a:150},{d:"Nov 11, 2025",m:".",a:500},
+    {d:"Oct 20, 2025",m:"vega m1",a:500},{d:"Sep 19, 2025",m:"m1 - jonathan hernandez y jocelyn",a:500}
+  ]
+};
+
+const GROUPS={
+  "Carlos":[{lbl:"Carlos Morales Solar Dynamics",recs:["Carlos Morales Solar Dynamics"]}],
+  "Anthony":[{lbl:"Anthony Guerrero",recs:["Anthony Guerrero"]}],
+  "Ulises":[{lbl:"Ulises (todos los pagos)",recs:["Ulises electra","Ulises Moron New"]}],
+  "Santiago":[{lbl:"Santiago Camino New",recs:["Santiago Camino New"]}],
+  "Juan":[{lbl:"Juan Hernandez Electra",recs:["Juan Hernandez Electra"]}]
+};
+
+let active='Carlos';
+const open={};
+
+function $f(n){return'$'+Math.abs(n).toLocaleString('en-US');}
+function com(r){return r.fc!==undefined?r.fc:r.s>11?2000:1000;}
+function totalPaid(k){return(GROUPS[k]||[]).reduce((s,g)=>s+g.recs.reduce((s2,r)=>s2+(PAYS[r]||[]).reduce((s3,p)=>s3+p.a,0),0),0);}
+function totalClaw(k){return SETTERS[k].filter(r=>r.cb).reduce((s,r)=>s+r.ca,0);}
+function clientPaid(r,k){
+  if(r.np)return 0;
+  if(r.fp!==undefined)return r.fp;
+  const recs=(GROUPS[k]||[]).flatMap(g=>g.recs);
+  const parts=r.c.toLowerCase().split(/[\s\-]+/).filter(p=>p.length>3);
+  let t=0;
+  recs.forEach(rec=>(PAYS[rec]||[]).forEach(p=>{
+    if(p.m&&p.m!=='.'&&parts.some(pt=>p.m.toLowerCase().includes(pt)))t+=p.a;
+  }));
+  return t>0?t:500;
+}
+
+function buildTabs(){
+  document.getElementById('tabs').innerHTML=Object.keys(SETTERS).map(k=>
+    `<button class="tab${k===active?' on':''}" onclick="active='${k}';buildTabs();render()">${k}<span class="n">${SETTERS[k].length}</span></button>`
+  ).join('');
+}
+
+function render(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  const fl=document.getElementById('flt').value;
+  const list=SETTERS[active];
+  const tp=totalPaid(active);
+  const tc=totalClaw(active);
+  const tcom=list.filter(r=>!r.cb).reduce((s,r)=>s+com(r),0);
+  const net=tcom+tc;
+
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-lbl">Total comisión</div><div class="stat-val g">${$f(tcom)}</div></div>
+    <div class="stat"><div class="stat-lbl">Total pagado</div><div class="stat-val a">${$f(tp)}</div></div>
+    <div class="stat"><div class="stat-lbl">Total clawbacks</div><div class="stat-val r">${tc<0?'-':''}${$f(tc)}</div></div>
+    <div class="stat"><div class="stat-lbl">Neto</div><div class="stat-val ${net>=0?'g':'r'}">${net<0?'-':''}${$f(net)}</div></div>`;
+
+  const rows=list.map(r=>{
+    if(r.cb)return{...r,cm:r.ca,pd:0,st:'clawback'};
+    const cm=com(r);
+    const pd=clientPaid(r,active);
+    return{...r,cm,pd,st:r.np?'none':pd>=cm?'paid':'partial'};
+  }).filter(r=>r.c.toLowerCase().includes(q)&&(fl==='all'||r.st===fl));
+
+  const t2=rows.filter(r=>!r.cb&&r.s>11);
+  const t1=rows.filter(r=>!r.cb&&r.s<=11);
+  const cbs=rows.filter(r=>r.cb);
+
+  let h=''; let i=1;
+  function card(r){
+    const b=r.st==='clawback'?`<span class="badge b-claw">✕ Clawback</span>`
+      :r.st==='paid'?`<span class="badge b-paid">✓ Pagado</span>`
+      :r.st==='none'?`<span class="badge b-none">— Sin pago</span>`
+      :`<span class="badge b-partial">~ Parcial ${$f(r.pd)}</span>`;
+    const hi=!r.cb&&r.s>11;
+    const kc=r.cb?'kw-hi':hi?'kw-hi':'kw-lo';
+    const cc=r.cb?'r':r.sh?'a':hi?'r':'g';
+    const sl=r.s>0?`${r.s} kW`:'—';
+    const sh=r.sh?`<span class="shared">⇄ ${r.sh}</span>`:'';
+    return`<div class="ccard">
+      <span class="c-num">${i++}</span>
+      <span class="c-name">${r.c}${sh}</span>
+      <span class="c-kw ${kc}">${sl}</span>
+      <span class="c-com ${cc}">${r.cm<0?'-':''}${$f(r.cm)}</span>
+      <div class="c-badge-row">${b}</div>
+    </div>`;
+  }
+
+  if(t2.length){h+=`<div class="sec-hdr">T2 — más de 11 kW · $2,000 c/u</div>`;t2.forEach(r=>{h+=card(r);});}
+  if(t1.length){h+=`<div class="sec-hdr">T1 — hasta 11 kW · $1,000 c/u</div>`;t1.forEach(r=>{h+=card(r);});}
+  if(cbs.length){h+=`<div class="sec-hdr">Clawbacks — cancelados</div>`;cbs.forEach(r=>{h+=card(r);});}
+  if(!rows.length)h=`<div class="empty">Sin resultados</div>`;
+  document.getElementById('cards').innerHTML=h;
+
+  // Payment cards
+  let ph='';
+  (GROUPS[active]||[]).forEach(g=>{
+    const pays=g.recs.flatMap(r=>(PAYS[r]||[]).map(p=>({...p,src:r}))).sort((a,b)=>new Date(b.d)-new Date(a.d));
+    if(!pays.length)return;
+    const tot=pays.reduce((s,p)=>s+p.a,0);
+    const k=g.lbl.replace(/\s/g,'_');
+    const isOpen=!!open[k];
+    const multi=g.recs.length>1;
+    ph+=`<div class="pay-card">
+      <div class="pay-hdr" onclick="tog('${k}')">
+        <div class="pay-hdr-left">
+          <span class="pay-name">${g.lbl}</span>
+          <span class="pay-cnt">${pays.length} pagos</span>
+        </div>
+        <div class="pay-hdr-right">
+          <span class="pay-total">${$f(tot)}</span>
+          <span class="pay-chev${isOpen?' open':''}">▾</span>
+        </div>
+      </div>`;
+    if(isOpen){
+      ph+='<div class="pay-lines">';
+      pays.forEach(p=>{
+        const memo=p.m&&p.m!=='.'?p.m:'';
+        const src=multi?`<span class="dsrc">${p.src}</span>`:'';
+        ph+=`<div class="dline">
+          <span class="ddot"></span>
+          <span class="ddate">${p.d}</span>
+          ${src}
+          <span class="dmemo">${memo}</span>
+          <span class="damt">${$f(p.a)}</span>
+        </div>`;
+      });
+      ph+='</div>';
+    }
+    ph+='</div>';
+  });
+  document.getElementById('pays').innerHTML=ph;
+}
+
+function tog(k){open[k]=!open[k];render();}
+buildTabs();render();
+</script>
+</body>
+</html>
