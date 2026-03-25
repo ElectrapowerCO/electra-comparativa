@@ -132,9 +132,13 @@ const SETTERS={
     {c:"Anaibis pardo",s:7.74},{c:"karina perez",s:7.74},{c:"leonardo andrade",s:8.6},{c:"Sindy santos cape coral",s:10.12},
     {c:"Serguei perez",s:11.61,cb:true,ca:-500},{c:"Liudis Remon",s:8.17},{c:"Yarelys veitia",s:8.17},
     {c:"Jose padron",s:8.17},{c:"adalid palma",s:6.02,sh:"Juan",fc:500,fp:250},{c:"Manny alfonso",s:11.61},
-    {c:"Gustavo thorne",s:8.17,fc:500,fp:250},
+    {c:"Gustavo thorne",s:8.17,sh:"Juan",fc:500,fp:250},
     {c:"Joselyn lopez",s:6.88,sh:"Juan",fc:500,fp:250},
-    {c:"Victoria palacios",s:0,cb:true,ca:-250}
+    {c:"Juan varela",s:8.17,sh:"Ulises",fc:500,fp:250},
+    {c:"Syed aly",s:6.02,fp:1000},
+    {c:"Victor palacios",s:20.68,sh:"Juan",cb:true,ca:-500},
+    {c:"Livan hernandez",s:5.16,cb:true,ca:-500},
+    {c:"Victoria gonzalez",s:7.31,sh:"Juan",cb:true,ca:-500}
   ],
   "Ulises":[
     {c:"Jose hernandez montenegro",s:7.31},{c:"Benjamin burgos",s:7.79},{c:"Leonardo laina",s:11.88},
@@ -159,7 +163,9 @@ const SETTERS={
     {c:"Adalid palma",s:6.02,sh:"Anthony",fc:500,fp:250},
     {c:"Jennifer colazzo",s:6.02,sh:"Ulises",fc:500,fp:250},
     {c:"Joselyn lopez",s:6.88,sh:"Anthony",fc:500,fp:250},
-    {c:"Victoria palacios",s:0,cb:true,ca:-250,sh:"Anthony"}
+    {c:"Victoria gonzalez",s:7.31,sh:"Anthony",cb:true,ca:-500},
+    {c:"Gustavo thorne",s:8.17,sh:"Anthony",fc:500,fp:250},
+    {c:"Victor palacios",s:20.68,sh:"Anthony",cb:true,ca:-500}
   ]
 };
 
@@ -229,7 +235,7 @@ let active='Carlos';
 const open={};
 
 function $f(n){return'$'+Math.abs(n).toLocaleString('en-US');}
-function com(r){return r.fc!==undefined?r.fc:r.s>11?2000:1000;}
+function com(r){return r.fc!==undefined?r.fc:r.s>10?2000:1000;}
 function totalPaid(k){return(GROUPS[k]||[]).reduce((s,g)=>s+g.recs.reduce((s2,r)=>s2+(PAYS[r]||[]).reduce((s3,p)=>s3+p.a,0),0),0);}
 function totalClaw(k){return SETTERS[k].filter(r=>r.cb).reduce((s,r)=>s+r.ca,0);}
 function clientPaid(r,k){
@@ -272,8 +278,8 @@ function render(){
     return{...r,cm,pd,st:r.np?'none':pd>=cm?'paid':'partial'};
   }).filter(r=>r.c.toLowerCase().includes(q)&&(fl==='all'||r.st===fl));
 
-  const t2=rows.filter(r=>!r.cb&&r.s>11);
-  const t1=rows.filter(r=>!r.cb&&r.s<=11);
+  const t2=rows.filter(r=>!r.cb&&r.s>10);
+  const t1=rows.filter(r=>!r.cb&&r.s<=10);
   const cbs=rows.filter(r=>r.cb);
 
   let h=''; let i=1;
@@ -282,7 +288,7 @@ function render(){
       :r.st==='paid'?`<span class="badge b-paid">✓ Pagado</span>`
       :r.st==='none'?`<span class="badge b-none">— Sin pago</span>`
       :`<span class="badge b-partial">~ Parcial ${$f(r.pd)}</span>`;
-    const hi=!r.cb&&r.s>11;
+    const hi=!r.cb&&r.s>10;
     const kc=r.cb?'kw-hi':hi?'kw-hi':'kw-lo';
     const cc=r.cb?'r':r.sh?'a':hi?'r':'g';
     const sl=r.s>0?`${r.s} kW`:'—';
@@ -296,8 +302,8 @@ function render(){
     </div>`;
   }
 
-  if(t2.length){h+=`<div class="sec-hdr">T2 — más de 11 kW · $2,000 c/u</div>`;t2.forEach(r=>{h+=card(r);});}
-  if(t1.length){h+=`<div class="sec-hdr">T1 — hasta 11 kW · $1,000 c/u</div>`;t1.forEach(r=>{h+=card(r);});}
+  if(t2.length){h+=`<div class="sec-hdr">T2 — más de 10 kW · $2,000 c/u</div>`;t2.forEach(r=>{h+=card(r);});}
+  if(t1.length){h+=`<div class="sec-hdr">T1 — hasta 10 kW · $1,000 c/u</div>`;t1.forEach(r=>{h+=card(r);});}
   if(cbs.length){h+=`<div class="sec-hdr">Clawbacks — cancelados</div>`;cbs.forEach(r=>{h+=card(r);});}
   if(!rows.length)h=`<div class="empty">Sin resultados</div>`;
   document.getElementById('cards').innerHTML=h;
