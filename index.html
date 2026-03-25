@@ -302,13 +302,14 @@ function render(){
     const hi=!r.cb&&r.s>10;
     const kc=r.cb?'kw-hi':hi?'kw-hi':'kw-lo';
     const cc=r.cb?'r':r.sh?'a':hi?'r':'g';
+    const strikethrough=r.sh==='Ulises'||r.sh==='Carlos+Ulises'||r.sh==='Anthony+Ulises'||r.sh==='Juan+Ulises';
     const sl=r.s>0?`${r.s} kW`:'—';
     const sh=r.sh?`<span class="shared">⇄ ${r.sh}</span>`:'';
     return`<div class="ccard">
       <span class="c-num">${i++}</span>
       <span class="c-name">${r.c}${sh}</span>
       <span class="c-kw ${kc}">${sl}</span>
-      <span class="c-com ${cc}">${r.cm<0?'-':''}${$f(r.cm)}</span>
+      <span class="c-com ${cc}" style="${strikethrough?'text-decoration:line-through;opacity:0.5':''}">${r.cm<0?'-':''}${$f(r.cm)}</span>
       <div class="c-badge-row">${b}</div>
     </div>`;
   }
