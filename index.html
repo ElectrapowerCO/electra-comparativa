@@ -25,7 +25,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab.on .n{background:rgba(79,142,247,0.2);color:#4f8ef7;}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;} .stat-wide{grid-column:1/-1;}
 .stat{background:#13161e;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 14px;}
 .stat-lbl{font-size:10px;font-weight:600;color:#5a6070;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
 .stat-val{font-size:20px;font-weight:700;font-family:'Courier New',monospace;}
@@ -114,20 +114,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script>
 const SETTERS={
-  "Carlos":[
-    {c:"Louis techelet",s:20.88},{c:"Joseph san miguel",s:11.61},{c:"Cordel skyers",s:10.32},
-    {c:"Javier lopez",s:8.6,cb:true,ca:-500},{c:"Victor narvaez- Laura trujillo",s:11.61,cb:true,ca:-500},
-    {c:"Berkis fernandez",s:15.17,cb:true,ca:-14460},{c:"Victor sutton",s:8.6},    {c:"Lydia Carter",s:10.56},{c:"dwight depass 20837",s:8.6},{c:"Gonzalo serna",s:15.4,cb:true,ca:-500},
-    {c:"Shirley depass 20806",s:11.18,cb:true,ca:-500},
-    {c:"shirley depass",s:10.25,cb:true,ca:-500},{c:"Sandra Varela",s:11.75,cb:true,ca:-500},
-    {c:"Gian fuentes",s:11.44},{c:"Daniel coria",s:11.44},    {c:"juan cordova",s:10.56,cb:true,ca:-500},{c:"Joseph san miguel add on",s:4.4,fp:500},
-                {c:"Olga salamanca",s:6.2,cb:true,ca:-500},
-    {c:"Renee Quijada",s:11.0,fp:1000},
-    {c:"Gardy Monnastine",s:9.3,fp:1000},
-    {c:"Argenetta Poellitz",s:9.5,fp:1000},
-    {c:"Juliet Williams",s:8.7,fp:1000},
-    {c:"Mildred Jones",s:12.3,fp:2000}
-  ],
   "Anthony":[
     {c:"Alexis pacheco",s:6.45},{c:"Adalberto rodriguez",s:9.89},{c:"Ricardo quiroga",s:5.16},{c:"Jimmy lopez",s:16.34},
     {c:"Jonathan tevalan",s:15.3},{c:"Teresa juanchi-alfonso",s:14.08},{c:"Leslie Villagra",s:9.89},
@@ -145,6 +131,20 @@ const SETTERS={
     {c:"Victor palacios",s:20.68,sh:"Juan",cb:true,ca:-500},
     {c:"Livan hernandez",s:5.16,cb:true,ca:-500},
     {c:"Victoria gonzalez",s:7.31,sh:"Juan",cb:true,ca:-500}
+  ],
+  "Carlos":[
+    {c:"Louis techelet",s:20.88},{c:"Joseph san miguel",s:11.61},{c:"Cordel skyers",s:10.32},
+    {c:"Javier lopez",s:8.6,cb:true,ca:-500},{c:"Victor narvaez- Laura trujillo",s:11.61,cb:true,ca:-500},
+    {c:"Berkis fernandez",s:15.17,cb:true,ca:-14460},{c:"Victor sutton",s:8.6},    {c:"Lydia Carter",s:10.56},{c:"dwight depass 20837",s:8.6},{c:"Gonzalo serna",s:15.4,cb:true,ca:-500},
+    {c:"Shirley depass 20806",s:11.18,cb:true,ca:-500},
+    {c:"shirley depass",s:10.25,cb:true,ca:-500},{c:"Sandra Varela",s:11.75,cb:true,ca:-500},
+    {c:"Gian fuentes",s:11.44},{c:"Daniel coria",s:11.44},    {c:"juan cordova",s:10.56,cb:true,ca:-500},{c:"Joseph san miguel add on",s:4.4,fp:500},
+                {c:"Olga salamanca",s:6.2,cb:true,ca:-500},
+    {c:"Renee Quijada",s:11.0,fp:1000},
+    {c:"Gardy Monnastine",s:9.3,fp:1000},
+    {c:"Argenetta Poellitz",s:9.5,fp:1000},
+    {c:"Juliet Williams",s:8.7,fp:1000},
+    {c:"Mildred Jones",s:12.3,fp:2000}
   ],
   "Ulises":[
                 {c:"adalid palma",s:6.02,fp:500},
@@ -246,7 +246,7 @@ const GROUPS={
   "Juan":[{lbl:"Juan Hernandez Electra",recs:["Juan Hernandez Electra"]}]
 };
 
-let active='Carlos';
+let active='Anthony';
 const open={};
 
 function $f(n){return'$'+Math.abs(n).toLocaleString('en-US');}
@@ -280,11 +280,13 @@ function render(){
   const tcom=list.filter(r=>!r.cb).reduce((s,r)=>s+com(r),0);
   const net=tcom+tc;
 
+  const resta = net - tp;
   document.getElementById('stats').innerHTML=`
-    <div class="stat"><div class="stat-lbl">Total comisión</div><div class="stat-val g">${$f(tcom)}</div></div>
-    <div class="stat"><div class="stat-lbl">Total pagado</div><div class="stat-val a">${$f(tp)}</div></div>
-    <div class="stat"><div class="stat-lbl">Total clawbacks</div><div class="stat-val r">${tc<0?'-':''}${$f(tc)}</div></div>
-    <div class="stat"><div class="stat-lbl">Neto</div><div class="stat-val ${net>=0?'g':'r'}">${net<0?'-':''}${$f(net)}</div></div>`;
+    <div class="stat"><div class="stat-lbl">Clientes</div><div class="stat-val g">${$f(tcom)}</div></div>
+    <div class="stat"><div class="stat-lbl">Clawbacks</div><div class="stat-val r">${tc<0?'-':''}${$f(tc)}</div></div>
+    <div class="stat"><div class="stat-lbl">Comisión después de clawbacks</div><div class="stat-val ${net>=0?'g':'r'}">${net<0?'-':''}${$f(net)}</div></div>
+    <div class="stat"><div class="stat-lbl">Dinero pagado</div><div class="stat-val a">${$f(tp)}</div></div>
+    <div class="stat stat-wide"><div class="stat-lbl">Restante por cobrar</div><div class="stat-val ${resta>=0?'g':'r'}">${resta<0?'-':''}${$f(resta)}</div></div>`;
 
   const rows=list.map(r=>{
     if(r.cb)return{...r,cm:r.ca,pd:0,st:'clawback'};
